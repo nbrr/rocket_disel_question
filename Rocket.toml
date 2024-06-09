@@ -1,0 +1,2 @@
+[default.databases]
+itk_db = { url = "postgres://dev:dev@localhost/itk" }
