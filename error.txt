@@ -1,0 +1,115 @@
+  Compiling dft v0.1.0 (/home/nbrr/dev/dft)
+error[E0277]: the trait bound `diesel_async::pooled_connection::AsyncDieselConnectionManager<diesel_async::AsyncPgConnection>: rocket_db_pools::pool::deadpool_old::DeadManager` is not satisfied
+  --> src/main.rs:16:21
+   |
+16 | struct DbConnection(Pool<AsyncPgConnection>);
+   |                     ^^^^^^^^^^^^^^^^^^^^^^^ the trait `rocket_db_pools::pool::deadpool_old::DeadManager` is not implemented for `diesel_async::pooled_connection::AsyncDieselConnectionManager<diesel_async::AsyncPgConnection>`, which is required by `deadpool::managed::Pool<diesel_async::pooled_connection::AsyncDieselConnectionManager<diesel_async::AsyncPgConnection>>: Pool`
+   |
+   = help: the trait `rocket_db_pools::pool::deadpool_old::DeadManager` is implemented for `rocket_db_pools::diesel::pooled_connection::AsyncDieselConnectionManager<rocket_db_pools::diesel::AsyncPgConnection>`
+   = note: required for `deadpool::managed::Pool<diesel_async::pooled_connection::AsyncDieselConnectionManager<diesel_async::AsyncPgConnection>>` to implement `Pool`
+note: required by a bound in `rocket_db_pools::Database::Pool`
+  --> /home/nbrr/.cargo/registry/src/index.crates.io-6f17d22bba15001f/rocket_db_pools-0.2.0/src/database.rs:41:16
+   |
+41 |     type Pool: Pool;
+   |                ^^^^ required by this bound in `Database::Pool`
+
+error[E0277]: the trait bound `diesel_async::pooled_connection::AsyncDieselConnectionManager<diesel_async::AsyncPgConnection>: rocket_db_pools::pool::deadpool_old::DeadManager` is not satisfied
+   --> src/main.rs:27:19
+    |
+27  | async fn my_route(mut conn: Connection<DbConnection>) -> Json<Vec<MyElement>> {
+    |                   ^^^^^^^^ the trait `rocket_db_pools::pool::deadpool_old::DeadManager` is not implemented for `diesel_async::pooled_connection::AsyncDieselConnectionManager<diesel_async::AsyncPgConnection>`, which is required by `rocket_db_pools::Connection<DbConnection>: Sized`
+    |
+    = help: the trait `rocket_db_pools::pool::deadpool_old::DeadManager` is implemented for `rocket_db_pools::diesel::pooled_connection::AsyncDieselConnectionManager<rocket_db_pools::diesel::AsyncPgConnection>`
+    = note: required for `deadpool::managed::Pool<diesel_async::pooled_connection::AsyncDieselConnectionManager<diesel_async::AsyncPgConnection>>` to implement `Pool`
+note: required because it appears within the type `rocket_db_pools::Connection<DbConnection>`
+   --> /home/nbrr/.cargo/registry/src/index.crates.io-6f17d22bba15001f/rocket_db_pools-0.2.0/src/database.rs:197:12
+    |
+197 | pub struct Connection<D: Database>(<D::Pool as Pool>::Connection);
+    |            ^^^^^^^^^^
+help: function arguments must have a statically known size, borrowed types always have a known size
+    |
+27  | async fn my_route(mut conn: &Connection<DbConnection>) -> Json<Vec<MyElement>> {
+    |                             +
+
+error[E0277]: the trait bound `diesel_async::pooled_connection::AsyncDieselConnectionManager<diesel_async::AsyncPgConnection>: rocket_db_pools::pool::deadpool_old::DeadManager` is not satisfied
+   --> src/main.rs:39:5
+    |
+39  |     mut conn: Connection<DbConnection>,
+    |     ^^^^^^^^ the trait `rocket_db_pools::pool::deadpool_old::DeadManager` is not implemented for `diesel_async::pooled_connection::AsyncDieselConnectionManager<diesel_async::AsyncPgConnection>`, which is required by `rocket_db_pools::Connection<DbConnection>: Sized`
+    |
+    = help: the trait `rocket_db_pools::pool::deadpool_old::DeadManager` is implemented for `rocket_db_pools::diesel::pooled_connection::AsyncDieselConnectionManager<rocket_db_pools::diesel::AsyncPgConnection>`
+    = note: required for `deadpool::managed::Pool<diesel_async::pooled_connection::AsyncDieselConnectionManager<diesel_async::AsyncPgConnection>>` to implement `Pool`
+note: required because it appears within the type `rocket_db_pools::Connection<DbConnection>`
+   --> /home/nbrr/.cargo/registry/src/index.crates.io-6f17d22bba15001f/rocket_db_pools-0.2.0/src/database.rs:197:12
+    |
+197 | pub struct Connection<D: Database>(<D::Pool as Pool>::Connection);
+    |            ^^^^^^^^^^
+help: function arguments must have a statically known size, borrowed types always have a known size
+    |
+39  |     mut conn: &Connection<DbConnection>,
+    |               +
+
+error[E0277]: the trait bound `diesel_async::pooled_connection::AsyncDieselConnectionManager<diesel_async::AsyncPgConnection>: rocket_db_pools::pool::deadpool_old::DeadManager` is not satisfied
+  --> src/main.rs:27:29
+   |
+27 | async fn my_route(mut conn: Connection<DbConnection>) -> Json<Vec<MyElement>> {
+   |                             ^^^^^^^^^^ the trait `rocket_db_pools::pool::deadpool_old::DeadManager` is not implemented for `diesel_async::pooled_connection::AsyncDieselConnectionManager<diesel_async::AsyncPgConnection>`, which is required by `deadpool::managed::Pool<diesel_async::pooled_connection::AsyncDieselConnectionManager<diesel_async::AsyncPgConnection>>: Pool`
+   |
+   = help: the trait `rocket_db_pools::pool::deadpool_old::DeadManager` is implemented for `rocket_db_pools::diesel::pooled_connection::AsyncDieselConnectionManager<rocket_db_pools::diesel::AsyncPgConnection>`
+   = note: required for `deadpool::managed::Pool<diesel_async::pooled_connection::AsyncDieselConnectionManager<diesel_async::AsyncPgConnection>>` to implement `Pool`
+
+error[E0277]: the trait bound `diesel_async::pooled_connection::AsyncDieselConnectionManager<diesel_async::AsyncPgConnection>: rocket_db_pools::pool::deadpool_old::DeadManager` is not satisfied
+   --> src/main.rs:27:29
+    |
+27  | async fn my_route(mut conn: Connection<DbConnection>) -> Json<Vec<MyElement>> {
+    |                             ^^^^^^^^^^^^^^^^^^^^^^^^ the trait `rocket_db_pools::pool::deadpool_old::DeadManager` is not implemented for `diesel_async::pooled_connection::AsyncDieselConnectionManager<diesel_async::AsyncPgConnection>`, which is required by `rocket_db_pools::Connection<DbConnection>: Sized`
+    |
+    = help: the trait `rocket_db_pools::pool::deadpool_old::DeadManager` is implemented for `rocket_db_pools::diesel::pooled_connection::AsyncDieselConnectionManager<rocket_db_pools::diesel::AsyncPgConnection>`
+    = note: required for `deadpool::managed::Pool<diesel_async::pooled_connection::AsyncDieselConnectionManager<diesel_async::AsyncPgConnection>>` to implement `Pool`
+note: required because it appears within the type `rocket_db_pools::Connection<DbConnection>`
+   --> /home/nbrr/.cargo/registry/src/index.crates.io-6f17d22bba15001f/rocket_db_pools-0.2.0/src/database.rs:197:12
+    |
+197 | pub struct Connection<D: Database>(<D::Pool as Pool>::Connection);
+    |            ^^^^^^^^^^
+note: required by a bound in `from_request`
+   --> /home/nbrr/.cargo/registry/src/index.crates.io-6f17d22bba15001f/rocket-0.5.1/src/request/from_request.rs:373:28
+    |
+373 | pub trait FromRequest<'r>: Sized {
+    |                            ^^^^^ required by this bound in `FromRequest::from_request`
+...
+383 |     async fn from_request(request: &'r Request<'_>) -> Outcome<Self, Self::Error>;
+    |              ------------ required by a bound in this associated function
+
+error[E0277]: the trait bound `diesel_async::pooled_connection::AsyncDieselConnectionManager<diesel_async::AsyncPgConnection>: rocket_db_pools::pool::deadpool_old::DeadManager` is not satisfied
+  --> src/main.rs:39:15
+   |
+39 |     mut conn: Connection<DbConnection>,
+   |               ^^^^^^^^^^ the trait `rocket_db_pools::pool::deadpool_old::DeadManager` is not implemented for `diesel_async::pooled_connection::AsyncDieselConnectionManager<diesel_async::AsyncPgConnection>`, which is required by `deadpool::managed::Pool<diesel_async::pooled_connection::AsyncDieselConnectionManager<diesel_async::AsyncPgConnection>>: Pool`
+   |
+   = help: the trait `rocket_db_pools::pool::deadpool_old::DeadManager` is implemented for `rocket_db_pools::diesel::pooled_connection::AsyncDieselConnectionManager<rocket_db_pools::diesel::AsyncPgConnection>`
+   = note: required for `deadpool::managed::Pool<diesel_async::pooled_connection::AsyncDieselConnectionManager<diesel_async::AsyncPgConnection>>` to implement `Pool`
+
+error[E0277]: the trait bound `diesel_async::pooled_connection::AsyncDieselConnectionManager<diesel_async::AsyncPgConnection>: rocket_db_pools::pool::deadpool_old::DeadManager` is not satisfied
+   --> src/main.rs:39:15
+    |
+39  |     mut conn: Connection<DbConnection>,
+    |               ^^^^^^^^^^^^^^^^^^^^^^^^ the trait `rocket_db_pools::pool::deadpool_old::DeadManager` is not implemented for `diesel_async::pooled_connection::AsyncDieselConnectionManager<diesel_async::AsyncPgConnection>`, which is required by `rocket_db_pools::Connection<DbConnection>: Sized`
+    |
+    = help: the trait `rocket_db_pools::pool::deadpool_old::DeadManager` is implemented for `rocket_db_pools::diesel::pooled_connection::AsyncDieselConnectionManager<rocket_db_pools::diesel::AsyncPgConnection>`
+    = note: required for `deadpool::managed::Pool<diesel_async::pooled_connection::AsyncDieselConnectionManager<diesel_async::AsyncPgConnection>>` to implement `Pool`
+note: required because it appears within the type `rocket_db_pools::Connection<DbConnection>`
+   --> /home/nbrr/.cargo/registry/src/index.crates.io-6f17d22bba15001f/rocket_db_pools-0.2.0/src/database.rs:197:12
+    |
+197 | pub struct Connection<D: Database>(<D::Pool as Pool>::Connection);
+    |            ^^^^^^^^^^
+note: required by a bound in `from_request`
+   --> /home/nbrr/.cargo/registry/src/index.crates.io-6f17d22bba15001f/rocket-0.5.1/src/request/from_request.rs:373:28
+    |
+373 | pub trait FromRequest<'r>: Sized {
+    |                            ^^^^^ required by this bound in `FromRequest::from_request`
+...
+383 |     async fn from_request(request: &'r Request<'_>) -> Outcome<Self, Self::Error>;
+    |              ------------ required by a bound in this associated function
+
+For more information about this error, try `rustc --explain E0277`.
+error: could not compile `dft` (bin "dft") due to 7 previous errors
