@@ -1,8 +1,9 @@
-use diesel::prelude::*;
-use diesel_async::pooled_connection::deadpool::Pool;
-use diesel_async::{AsyncPgConnection, RunQueryDsl};
+use diesel_async::AsyncPgConnection;
 use rocket::serde::json::Json;
-use rocket_db_pools::{Connection, Database};
+use rocket_db_pools::{
+    diesel::{prelude::*, PgPool},
+    Connection, Database,
+};
 use serde::{Deserialize, Serialize};
 use uuid::Uuid;
 
@@ -13,7 +14,7 @@ mod schema;
 
 #[derive(Database)]
 #[database("itk_db")]
-struct DbConnection(Pool<AsyncPgConnection>);
+struct DbConnection(PgPool);
 
 #[derive(Identifiable, Queryable, Selectable, Insertable, Serialize, Deserialize)]
 #[diesel(table_name=schema::my_elements)]
@@ -34,6 +35,16 @@ async fn my_route(mut conn: Connection<DbConnection>) -> Json<Vec<MyElement>> {
     Json(my_elements)
 }
 
+async fn external_function(
+    c: &mut AsyncPgConnection,
+    my_element: &MyElement,
+) -> QueryResult<MyElement> {
+    diesel::insert_into(schema::my_elements::table)
+        .values(my_element)
+        .get_result(c) // <-- this has an error
+        .await
+}
+
 #[post("/", format = "application/json", data = "<my_new_element>")]
 async fn my_post_route(
     mut conn: Connection<DbConnection>,
@@ -41,7 +52,7 @@ async fn my_post_route(
 ) -> Json<MyElement> {
     let my_element = diesel::insert_into(schema::my_elements::table)
         .values(&my_new_element.0)
-        .get_result(&mut **conn)
+        .get_result(&mut **conn) // <-- this doesn't
         .await
         .unwrap();
 
