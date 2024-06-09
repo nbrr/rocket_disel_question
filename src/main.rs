@@ -1,6 +1,5 @@
-use diesel::prelude::*;
 use rocket::serde::json::Json;
-use rocket_sync_db_pools::database;
+use rocket_db_pools::{diesel::prelude::*, diesel::PgPool, Connection, Database};
 use serde::Serialize;
 use uuid::Uuid;
 
@@ -9,8 +8,9 @@ extern crate rocket;
 
 mod schema;
 
+#[derive(Database)]
 #[database("itk_db")]
-struct DbConnection(diesel::PgConnection);
+struct DbConnection(PgPool);
 
 #[derive(Identifiable, Queryable, Selectable, Serialize)]
 #[diesel(table_name=schema::my_elements)]
@@ -21,21 +21,19 @@ pub struct MyElement {
 }
 
 #[get("/")]
-async fn my_route(conn: DbConnection) -> Json<Vec<MyElement>> {
-    conn.run(|c| {
-        let my_elements: Vec<MyElement> = schema::my_elements::table
-            .select(MyElement::as_select())
-            .load(c)
-            .unwrap();
+async fn my_route(mut conn: Connection<DbConnection>) -> Json<Vec<MyElement>> {
+    let my_elements: Vec<MyElement> = schema::my_elements::table
+        .select(MyElement::as_select())
+        .load(&mut **conn)
+        .await
+        .unwrap();
 
-        Json(my_elements)
-    })
-    .await
+    Json(my_elements)
 }
 
 #[launch]
 fn rocket() -> _ {
     rocket::build()
-        .attach(DbConnection::fairing())
+        .attach(DbConnection::init())
         .mount("/", routes![my_route])
 }
