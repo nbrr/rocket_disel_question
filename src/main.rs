@@ -1,5 +1,8 @@
+use diesel::prelude::*;
+use diesel_async::pooled_connection::deadpool::Pool;
+use diesel_async::{AsyncPgConnection, RunQueryDsl};
 use rocket::serde::json::Json;
-use rocket_db_pools::{diesel::prelude::*, diesel::PgPool, Connection, Database};
+use rocket_db_pools::{Connection, Database};
 use serde::{Deserialize, Serialize};
 use uuid::Uuid;
 
@@ -10,7 +13,7 @@ mod schema;
 
 #[derive(Database)]
 #[database("itk_db")]
-struct DbConnection(PgPool);
+struct DbConnection(Pool<AsyncPgConnection>);
 
 #[derive(Identifiable, Queryable, Selectable, Insertable, Serialize, Deserialize)]
 #[diesel(table_name=schema::my_elements)]

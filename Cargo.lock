@@ -263,6 +263,7 @@ name = "dft"
 version = "0.1.0"
 dependencies = [
  "diesel",
+ "diesel-async 0.3.2",
  "rocket",
  "rocket_db_pools",
  "serde",
@@ -282,6 +283,21 @@ dependencies = [
  "pq-sys",
  "serde_json",
  "uuid",
+]
+
+[[package]]
+name = "diesel-async"
+version = "0.3.2"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "c7e7974099f0d9bde0e010dd3a673555276a474f3362a7a52ab535a57b7c5056"
+dependencies = [
+ "async-trait",
+ "deadpool",
+ "diesel",
+ "futures-util",
+ "scoped-futures",
+ "tokio",
+ "tokio-postgres",
 ]
 
 [[package]]
@@ -1180,7 +1196,7 @@ checksum = "c6578b2740ceee3e78bff63fe9299d964b7e68318446cdcb9af3b9cab46e1e9d"
 dependencies = [
  "deadpool",
  "diesel",
- "diesel-async",
+ "diesel-async 0.4.1",
  "rocket",
  "rocket_db_pools_codegen",
  "version_check",
